@@ -161,7 +161,7 @@ const ProfilePost = ({ img }) => {
 
                 <Divider my={4} bg={"gray.8000"} />
 
-                <PostFooter />
+                <PostFooter isProfilePage={true} />
               </Flex>
             </Flex>
           </ModalBody>

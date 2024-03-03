@@ -14,7 +14,7 @@ import {
   UnlikeLogo,
 } from "../../assets/constants";
 
-const PostFooter = ({ username }) => {
+const PostFooter = ({ username, isProfilePage }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(1000);
 
@@ -44,15 +44,19 @@ const PostFooter = ({ username }) => {
         {likes} likes
       </Text>
 
-      <Text fontSize="sm" fontWeight={700}>
-        {username}{" "}
-        <Text as="span" fontWeight={400}>
-          feeling good
-        </Text>
-      </Text>
-      <Text as="sm" color={"gray"}>
-        view all 1,000 comments
-      </Text>
+      {!isProfilePage && (
+        <>
+          <Text fontSize="sm" fontWeight={700}>
+            {username}{" "}
+            <Text as="span" fontWeight={400}>
+              feeling good
+            </Text>
+          </Text>
+          <Text as="sm" color={"gray"}>
+            view all 1,000 comments
+          </Text>
+        </>
+      )}
 
       <Flex
         alignItems={"center"}
