@@ -1,8 +1,28 @@
-import { Flex, GridItem, Image, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Flex,
+  GridItem,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import Comment from "../Comment/Comment";
+import PostFooter from "../FeedPosts/PostFooter";
 
 const ProfilePost = ({ img }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       <GridItem
@@ -13,6 +33,7 @@ const ProfilePost = ({ img }) => {
         borderColor={"whiteAlpha.300"}
         position={"relative"}
         aspectRatio={1 / 1}
+        onClick={onOpen}
       >
         <Flex
           opacity={0}
@@ -51,6 +72,101 @@ const ProfilePost = ({ img }) => {
           objectFit={"cover"}
         />
       </GridItem>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered={true}
+        size={{ base: "3xl", md: "5xl" }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody bg={"black"} pb={5}>
+            <Flex
+              gap="4"
+              w={{ base: "90%", sm: "70%", md: "full" }}
+              mx={"auto"}
+              // maxH={"90vh"}
+              // minH={"50vh"}
+            >
+              <Flex
+                borderRadius={4}
+                overflow={"hidden"}
+                border={"1px solid"}
+                borderColor={"whiteAlpha.300"}
+                flex={1.5}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Image src={img} alt="profile post" />
+              </Flex>
+
+              <Flex
+                flex={1}
+                flexDir={"column"}
+                px={10}
+                display={{ base: "none", md: "flex" }}
+              >
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                  <Flex alignItems={"center"} gap={4}>
+                    <Avatar src="/kirito.jpg" size={"sm"} name="Alexis" />
+                    <Text fontWeight={"bold"} fontSize={12}>
+                      Alexis tamayo
+                    </Text>
+                  </Flex>
+
+                  <Box
+                    size={"sm"}
+                    bg={"transparent"}
+                    _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
+                    borderRadius={4}
+                    p={1}
+                  >
+                    <MdDelete size={20} cursor="pointer" />
+                  </Box>
+                </Flex>
+
+                <Divider my={4} bg={"gray.500"} />
+
+                <VStack
+                  w="full"
+                  alignItems={"start"}
+                  maxH={"350px"}
+                  overflowY={"auto"}
+                >
+                  <Comment
+                    createdAt="1d ago"
+                    username="Alex"
+                    profile="/kirito.jpg"
+                    text={"greate"}
+                  />
+                  <Comment
+                    createdAt="2h ago"
+                    username="Kazuto"
+                    profile={
+                      "https://i.pinimg.com/736x/01/30/f3/0130f3c011e01aee34e1c6b3b9414b30.jpg"
+                    }
+                    text={"expectacular"}
+                  />
+                  <Comment
+                    createdAt="1d ago"
+                    username="Nijima"
+                    profile={
+                      "https://i.pinimg.com/736x/9a/3f/7c/9a3f7c5a3b6a0982971c34e5a60c9866.jpg"
+                    }
+                    text={"gran sabaticon"}
+                  />
+                </VStack>
+
+                <Divider my={4} bg={"gray.8000"} />
+
+                <PostFooter />
+              </Flex>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
