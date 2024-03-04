@@ -6,8 +6,17 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import useUserProfileStore from "../../store/userProfileStore";
+import useAuthStore from "../../store/authStore";
 
 const ProfileHeader = () => {
+  const { userProfile } = useUserProfileStore();
+  const authUser = useAuthStore((state) => state.user);
+  const visitingOwnProfileAndAuth =
+    authUser && authUser.username === userProfile.username;
+  const visitingAnotherProfileAndAuth =
+    authUser && authUser.username !== userProfile.username;
+
   return (
     <Flex
       gap={{ base: 4, sm: 10 }}
@@ -20,7 +29,7 @@ const ProfileHeader = () => {
         alignSelf={"flex-start"}
         mx={"auto"}
       >
-        <Avatar src="/kirito.jpg" alt="Alexis" />
+        <Avatar src={userProfile.profilePicURL} alt="Alexis" />
       </AvatarGroup>
 
       <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
@@ -31,52 +40,63 @@ const ProfileHeader = () => {
           alignItems={"center"}
           w={"full"}
         >
-          <Text fontSize={{ base: "sm", md: "lg" }}>Alexis</Text>
+          <Text fontSize={{ base: "sm", md: "lg" }}>
+            {userProfile.username}
+          </Text>
 
-          <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
-            <Button
-              bg={"white"}
-              color={"black"}
-              _hover={{ bg: "whiteAlpha.800" }}
-              size={{ base: "xs", md: "sm" }}
-            >
-              Edit Profile
-            </Button>
-          </Flex>
+          {visitingOwnProfileAndAuth && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"white"}
+                color={"black"}
+                _hover={{ bg: "whiteAlpha.800" }}
+                size={{ base: "xs", md: "sm" }}
+              >
+                Editar Perfil
+              </Button>
+            </Flex>
+          )}
+          {visitingAnotherProfileAndAuth && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"blue.500"}
+                color={"white"}
+                _hover={{ bg: "blue.600" }}
+                size={{ base: "xs", md: "sm" }}
+              >
+                Seguir
+              </Button>
+            </Flex>
+          )}
         </Flex>
 
         <Flex alignItems={"center"} gap={{ base: 2, sm: 4 }}>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              3
+              {userProfile.posts.length}
             </Text>
-            Posts
+            Publicaciones
           </Text>
-
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              132
+              {userProfile.followers.length}
             </Text>
-            Followers
+            Seguidores
           </Text>
-
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as="span" fontWeight={"bold"} mr={1}>
-              10
+              {userProfile.following.length}
             </Text>
-            Following
+            Sigue
           </Text>
         </Flex>
 
         <Flex alignItems={"center"} gap={4}>
           <Text fontSize={"sm"} fontWeight={"bold"}>
-            Alexis Tamayo
+            {userProfile.fullName}
           </Text>
         </Flex>
-        <Text fontSize={"sm"}>
-          "Sé cortés con todos, sociable con muchos, familiar con pocos, amigo
-          con uno y enemigo con ninguno" -Benjamin Franklin -
-        </Text>
+        <Text fontSize={"sm"}>{userProfile.bio}</Text>
       </VStack>
     </Flex>
   );
