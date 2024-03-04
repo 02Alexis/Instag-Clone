@@ -17,8 +17,16 @@ const GoogleAuth = ({ prefix }) => {
         showToast("Error", error.message, "error");
         return;
       }
+      const userRef = doc(firestore, "users", newUser.user.uid);
+      const userSnap = await getDoc(userRef);
 
-      if (newUser) {
+      if (userSnap.exists()) {
+        // login
+        const userDoc = userSnap.data();
+        localStorage.setItem("user-info", JSON.stringify(userDoc));
+        loginUser(userDoc);
+      } else {
+        // signup
         const userDoc = {
           uid: newUser.user.uid,
           email: newUser.user.email,
